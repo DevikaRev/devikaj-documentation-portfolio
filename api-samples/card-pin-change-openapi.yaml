@@ -1,0 +1,50 @@
+
+openapi: 3.0.0
+info:
+  title: Card PIN Management API
+  version: 1.0.0
+  description: >
+    This API allows users to change their credit/debit card PIN securely.
+    This operation is a core security function and requires strict validation.
+
+paths:
+  /cards/{cardId}/pin:
+    put:
+      summary: Change card PIN
+      description: Securely updates the PIN associated with a given card.
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier for the card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPin:
+                  type: string
+                  example: "1234"
+                  description: The current PIN
+                newPin:
+                  type: string
+                  example: "5678"
+                  description: The new PIN to be set
+              required:
+                - oldPin
+                - newPin
+      responses:
+        '200':
+          description: PIN successfully changed
+        '400':
+          description: Invalid request payload or missing fields
+        '401':
+          description: Authentication failed
+        '403':
+          description: Authorization error or PIN policy violation
+        '500':
+          description: Internal server error
